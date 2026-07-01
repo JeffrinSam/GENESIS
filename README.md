@@ -234,13 +234,14 @@ GENESIS builds on these publicly available models. Clone them separately and set
   year      = {2026}
 }
 
-@article{fernando2026generativempc,
+@inproceedings{fernando2026generativempc,
   title     = {GenerativeMPC: VLM-RAG-guided Whole-Body MPC with Virtual Impedance for
                Bimanual Mobile Manipulation},
   author    = {Fernando, Marcelino Julio and Altamirano Cabrera, Miguel and Sam, Jeffrin and
                Mahmoud, Yara and Gubernatorov, Konstantin and Tsetserukou, Dzmitry},
-  journal   = {arXiv preprint arXiv:2604.19522},
-  year      = {2026}
+  booktitle = {2026 IEEE International Conference on Systems, Man, and Cybernetics (SMC)},
+  year      = {2026},
+  note      = {arXiv:2604.19522}
 }
 
 @article{zhura2026diffusionanything,
@@ -324,7 +325,7 @@ All publications — **bold** = first author. Verified from Google Scholar (OyIR
 |------|-------|-------|-------------|
 | 2026 | **[Action Agent: Agentic Video Generation Meets Flow-Constrained Diffusion](https://arxiv.org/abs/2605.01477)** | IROS 2026 | [2605.01477](https://arxiv.org/abs/2605.01477) |
 | 2026 | **[Output-Level Regularization Eliminates the Seed Lottery in Single-GPU VLA Fine-Tuning](https://arxiv.org/abs/2606.13856)** | arXiv | [2606.13856](https://arxiv.org/abs/2606.13856) |
-| 2026 | [GenerativeMPC: VLM-RAG-guided Whole-Body MPC with Virtual Impedance for Bimanual Mobile Manipulation](https://arxiv.org/abs/2604.19522) | arXiv | [2604.19522](https://arxiv.org/abs/2604.19522) |
+| 2026 | [GenerativeMPC: VLM-RAG-guided Whole-Body MPC with Virtual Impedance for Bimanual Mobile Manipulation](https://arxiv.org/abs/2604.19522) | IEEE SMC 2026 | [2604.19522](https://arxiv.org/abs/2604.19522) |
 | 2026 | [DiffusionAnything: End-to-End In-context Diffusion Learning for Unified Navigation and Pre-Grasp Motion](https://arxiv.org/abs/2603.26322) | arXiv | [2603.26322](https://arxiv.org/abs/2603.26322) |
 | 2026 | [DreamToNav: Generalizable Navigation for Robots via Generative Video Planning](https://arxiv.org/abs/2603.06190) | arXiv | [2603.06190](https://arxiv.org/abs/2603.06190) |
 | 2026 | [TapHRI: TCN-Driven Touch Control of Collaborative Robots Using Only Embedded Robot Sensing](https://dl.acm.org/doi/10.1145/3776734.3794561) | HRI 2026 | [10.1145/3776734.3794561](https://dl.acm.org/doi/10.1145/3776734.3794561) |
