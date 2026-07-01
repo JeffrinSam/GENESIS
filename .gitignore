@@ -1,0 +1,68 @@
+# Model checkpoints & weights
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+checkpoints/
+models/
+pretrained/
+
+# Large data files
+*.zip
+*.tar.gz
+*.hdf5
+*.h5
+data/trajectories/
+data/raw/
+results/raw/
+outputs/
+uploads/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Weights & Biases
+wandb/
+.wandb/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Isaac Sim
+kit/
+_build/
+*.log
+torchinductor_*/
+torchelastic_*/
+
+# Temp
+tmp/
+temp/
+*.tmp

@@ -1,0 +1,27 @@
+# Core dependencies
+anthropic>=0.40.0           # Claude API
+pyyaml>=6.0.2               # Config files
+python-dotenv>=1.0.1        # Environment variables
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Statistics
+scipy>=1.10.0
+
+# HTTP
+requests>=2.28.0            # API calls (opensource_optimizer)
+
+# Utilities
+tqdm>=4.65.0                # Progress bars
+colorama>=0.4.6             # Colored output
+
+# Optional: For DPO baseline
+# torch>=2.0.0
+# transformers>=4.30.0
+# datasets>=2.14.0

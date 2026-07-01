@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video-to-Navigation Inference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .upload-section {
+            margin-bottom: 40px;
+        }
+
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .drop-zone:hover {
+            background: #e9ecef;
+            border-color: #764ba2;
+        }
+
+        .drop-zone.dragover {
+            background: #e7f3ff;
+            border-color: #2196F3;
+            transform: scale(1.02);
+        }
+
+        .drop-zone-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone-text {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-hint {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .selected-file {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d4edda;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .selected-file.show {
+            display: block;
+        }
+
+        .config-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .config-group {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .config-group h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .results-section {
+            display: none;
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .results-header {
+            background: #28a745;
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+
+        .results-header h2 {
+            font-size: 1.8em;
+        }
+
+        .visualization-container {
+            text-align: center;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .visualization-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .download-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .download-btn {
+            padding: 12px 20px;
+            background: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #138496;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎥 Video-to-Navigation Inference</h1>
+            <p>Upload a video and get navigation predictions with visualizations</p>
+        </div>
+
+        <div class="content">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-icon">📁</div>
+                    <div class="drop-zone-text">Drag & Drop Video Here</div>
+                    <div class="drop-zone-hint">or click to browse (MP4, AVI, MOV, MKV, WEBM)</div>
+                    <input type="file" id="fileInput" class="file-input" accept="video/*">
+                </div>
+                <div class="selected-file" id="selectedFile">
+                    <strong>Selected:</strong> <span id="fileName"></span>
+                    <div id="videoPreview" style="margin-top: 15px; display: none;">
+                        <h4>Preview:</h4>
+                        <img id="previewImage" style="max-width: 100%; border-radius: 10px; max-height: 300px;">
+                        <div id="videoInfo" style="margin-top: 10px; color: #666; font-size: 0.9em;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error" id="errorMessage"></div>
+
+            <!-- Configuration Section -->
+            <div class="config-section">
+                <div class="config-group">
+                    <h3>Model Selection</h3>
+                    <div class="form-group">
+                        <label for="modelType">Choose Model:</label>
+                        <select id="modelType">
+                            <option value="model1">Model 1: Flow-Constrained (Wheeled)</option>
+                            <option value="model2">Model 2: FlowDiT V2 (Goal-Conditioned)</option>
+                            <option value="humanoid_v1">Humanoid V1: Flow-Constrained (Unitree G1)</option>
+                            <option value="humanoid_v1_1">Humanoid V1.1: RAFT+CLIP+DINOv2 (Unitree G1)</option>
+                            <option value="humanoid_v1_2">Humanoid V1.2: RAFT+CLIP+DINOv2 (Combined Data)</option>
+                            <option value="humanoid_v2">Humanoid V2: FlowDiT (Unitree G1)</option>
+                            <option value="humanoid_v2_2">Humanoid V2.2: FlowDiT (Combined Data)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="modelInfoBox" style="display: none; background: #e7f3ff; padding: 12px; border-radius: 8px; font-size: 0.85em; color: #333;">
+                    </div>
+                    <div class="form-group" id="embodimentGroup">
+                        <label for="embodiment">Robot Embodiment:</label>
+                        <select id="embodiment">
+                            <option value="wheeled">Wheeled</option>
+                            <option value="legged">Legged</option>
+                            <option value="aerial">Aerial</option>
+                            <option value="humanoid">Humanoid</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="trajectoryGroup">
+                        <label>
+                            <input type="checkbox" id="trajectoryMode" checked>
+                            Trajectory Mode (Full Video Sequence)
+                        </label>
+                    </div>
+                    <div class="form-group" id="inferenceModeGroup" style="display: none;">
+                        <label for="inferenceMode">Inference Mode:</label>
+                        <select id="inferenceMode">
+                            <option value="mode1">Mode 1: Full Trajectory (one velocity per frame)</option>
+                            <option value="mode2">Mode 2: Realtime Closed-Loop</option>
+                        </select>
+                        <div id="modeDescription" style="margin-top: 8px; font-size: 0.85em; color: #666; padding: 8px; background: #f0f4ff; border-radius: 6px;">
+                            Mode 1 processes every frame of the video as an observation, producing exactly <strong>FPS x duration</strong> velocity points (e.g., 16fps x 5s = 80 points). Goal video is encoded once.
+                        </div>
+                    </div>
+                    <div class="form-group" id="videoFpsGroup" style="display: none;">
+                        <label for="videoFps">Video FPS (8-24):</label>
+                        <input type="number" id="videoFps" value="16" min="8" max="24" step="1">
+                        <div style="font-size: 0.8em; color: #888; margin-top: 4px;">
+                            WAN 2.2 default: 16fps | LTX default: 24fps | Min: 8fps
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <h3>Advanced Settings</h3>
+                    <div class="form-group" id="currentObsGroup">
+                        <label for="currentObsMode">Current Observation Frame:</label>
+                        <select id="currentObsMode">
+                            <option value="middle">Middle</option>
+                            <option value="first">First</option>
+                            <option value="last">Last</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="device">Device:</label>
+                        <select id="device">
+                            <option value="cuda">CUDA (GPU)</option>
+                            <option value="cpu">CPU</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button Section -->
+            <div class="button-group">
+                <button class="btn btn-primary" id="runInference" disabled>Run Inference</button>
+                <button class="btn btn-secondary" id="clearResults">Clear</button>
+            </div>
+
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Processing video... This may take a few minutes.</p>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <h2>✓ Inference Complete</h2>
+                </div>
+
+                <div class="stats" id="stats"></div>
+
+                <div class="visualization-container">
+                    <h3>Visualization</h3>
+                    <img id="visualization" src="" alt="Visualization">
+                </div>
+
+                <div class="download-section">
+                    <button class="download-btn" onclick="downloadData('csv')">📊 Download CSV</button>
+                    <button class="download-btn" onclick="downloadData('excel')">📈 Download Excel</button>
+                    <button class="download-btn" onclick="downloadData('txt')">📄 Download TXT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFile = null;
+        let inferenceData = null;
+
+        // File upload handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const selectedFile = document.getElementById('selectedFile');
+        const fileName = document.getElementById('fileName');
+        const runInferenceBtn = document.getElementById('runInference');
+        const modelType = document.getElementById('modelType');
+        const currentObsGroup = document.getElementById('currentObsGroup');
+        const embodimentGroup = document.getElementById('embodimentGroup');
+        const trajectoryGroup = document.getElementById('trajectoryGroup');
+
+        const modelInfoBox = document.getElementById('modelInfoBox');
+
+        const MODEL_INFO = {
+            'model1': 'RAFT + VDM + DINOv2 fusion network. Trained on RECON wheeled robot dataset (3,579 clips). Best for wheeled/legged robots.',
+            'model2': 'FlowDiT diffusion transformer with goal conditioning. Trained on RECON dataset. Predicts 8-step action sequences.',
+            'humanoid_v1': 'DINOv2 + FusionNetwork trained on Unitree G1 humanoid data (103 episodes from Isaac Sim). Uses frame-diff ego-motion.',
+            'humanoid_v1_1': 'RAFT optical flow + CLIP-Large (1024d) + DINOv2 (768d) + FusionNetwork. Proper feature pipeline on Unitree G1 data. Best val loss: 0.0121.',
+            'humanoid_v1_2': 'RAFT + CLIP-Large + DINOv2 + FusionNetwork. Trained on combined Unitree G1 + Arena G1 data (203 episodes). Best val loss: 0.0055.',
+            'humanoid_v2': 'FlowDiT diffusion transformer trained on Unitree G1 humanoid data (103 episodes from Isaac Sim). Best val loss: 0.0591.',
+            'humanoid_v2_2': 'FlowDiT diffusion transformer trained on combined Unitree G1 + Arena G1 data (203 episodes). Goal-conditioned 8-step predictions.'
+        };
+
+        const inferenceModeGroup = document.getElementById('inferenceModeGroup');
+        const videoFpsGroup = document.getElementById('videoFpsGroup');
+        const inferenceMode = document.getElementById('inferenceMode');
+        const modeDescription = document.getElementById('modeDescription');
+
+        // Toggle model-specific settings
+        modelType.addEventListener('change', function() {
+            const val = this.value;
+
+            // Show/hide model-specific options
+            if (val === 'model2' || val === 'humanoid_v2' || val === 'humanoid_v2_2') {
+                currentObsGroup.style.display = 'block';
+                embodimentGroup.style.display = 'none';
+                trajectoryGroup.style.display = 'none';
+                // Show dual-mode options for V2.2
+                if (val === 'humanoid_v2_2') {
+                    inferenceModeGroup.style.display = 'block';
+                    updateModeUI();
+                } else {
+                    inferenceModeGroup.style.display = 'none';
+                    videoFpsGroup.style.display = 'none';
+                }
+            } else if (val === 'humanoid_v1' || val === 'humanoid_v1_1' || val === 'humanoid_v1_2') {
+                currentObsGroup.style.display = 'none';
+                embodimentGroup.style.display = 'none';
+                trajectoryGroup.style.display = 'block';
+                inferenceModeGroup.style.display = 'none';
+                videoFpsGroup.style.display = 'none';
+            } else {
+                currentObsGroup.style.display = 'none';
+                embodimentGroup.style.display = 'block';
+                trajectoryGroup.style.display = 'block';
+                inferenceModeGroup.style.display = 'none';
+                videoFpsGroup.style.display = 'none';
+            }
+
+            // Show model info
+            if (MODEL_INFO[val]) {
+                modelInfoBox.textContent = MODEL_INFO[val];
+                modelInfoBox.style.display = 'block';
+            } else {
+                modelInfoBox.style.display = 'none';
+            }
+        });
+
+        inferenceMode.addEventListener('change', updateModeUI);
+
+        function updateModeUI() {
+            const mode = inferenceMode.value;
+            if (mode === 'mode1') {
+                videoFpsGroup.style.display = 'block';
+                currentObsGroup.style.display = 'none';
+                modeDescription.innerHTML = 'Mode 1 processes <strong>every frame</strong> of the video as an observation, producing exactly <strong>FPS x duration</strong> velocity points (e.g., 16fps x 5s = 80 points). Goal video is encoded once. Best for offline trajectory planning.';
+            } else {
+                videoFpsGroup.style.display = 'none';
+                currentObsGroup.style.display = 'block';
+                modeDescription.innerHTML = 'Mode 2 uses a single observation frame from the video with <strong>cached goal features</strong>. Returns 8-step action horizon. Best for real-time closed-loop control at <strong>~49Hz</strong>.';
+            }
+        }
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            if (!file.type.startsWith('video/')) {
+                showError('Please select a video file');
+                return;
+            }
+
+            currentFile = file;
+            fileName.textContent = file.name;
+            selectedFile.classList.add('show');
+            runInferenceBtn.disabled = false;
+            hideError();
+            
+            // Generate preview
+            generatePreview(file);
+        }
+
+        async function generatePreview(file) {
+            const previewDiv = document.getElementById('videoPreview');
+            const previewImage = document.getElementById('previewImage');
+            const videoInfo = document.getElementById('videoInfo');
+            
+            try {
+                const formData = new FormData();
+                formData.append('video', file);
+                
+                const response = await fetch('/api/preview_video', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    console.warn('Preview generation failed');
+                    return;
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    previewImage.src = data.preview;
+                    videoInfo.innerHTML = `<strong>File:</strong> ${file.name}<br><strong>Size:</strong> ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+                    previewDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.warn('Error generating preview:', error);
+            }
+        }
+
+        // Run inference
+        runInferenceBtn.addEventListener('click', async () => {
+            if (!currentFile) return;
+
+            const loading = document.getElementById('loading');
+            const resultsSection = document.getElementById('resultsSection');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Show loading
+            loading.classList.add('show');
+            resultsSection.classList.remove('show');
+            hideError();
+            runInferenceBtn.disabled = true;
+
+            try {
+                // Upload file
+                const formData = new FormData();
+                formData.append('file', currentFile);
+
+                const uploadResponse = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!uploadResponse.ok) {
+                    throw new Error('File upload failed');
+                }
+
+                const uploadData = await uploadResponse.json();
+
+                // Run inference
+                const inferenceResponse = await fetch('/api/inference', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        filename: uploadData.filename,
+                        model_type: modelType.value,
+                        trajectory_mode: document.getElementById('trajectoryMode').checked,
+                        embodiment: document.getElementById('embodiment').value,
+                        current_obs_mode: document.getElementById('currentObsMode').value,
+                        device: document.getElementById('device').value,
+                        inference_mode: inferenceMode.value,
+                        video_fps: parseInt(document.getElementById('videoFps').value) || 16
+                    })
+                });
+
+                if (!inferenceResponse.ok) {
+                    const errorData = await inferenceResponse.json();
+                    throw new Error(errorData.error || 'Inference failed');
+                }
+
+                const result = await inferenceResponse.json();
+                inferenceData = result;
+
+                // Display results
+                displayResults(result);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                loading.classList.remove('show');
+                runInferenceBtn.disabled = false;
+            }
+        });
+
+        function displayResults(result) {
+            const resultsSection = document.getElementById('resultsSection');
+            const visualization = document.getElementById('visualization');
+            const stats = document.getElementById('stats');
+
+            // Show visualization
+            visualization.src = 'data:image/png;base64,' + result.visualization;
+            resultsSection.classList.add('show');
+
+            // Model name mapping
+            const modelNames = {
+                'model1': 'Flow-Constrained (Wheeled)',
+                'model2': 'FlowDiT V2 (Goal-Conditioned)',
+                'humanoid_v1': 'Humanoid V1 (Unitree G1)',
+                'humanoid_v1_1': 'Humanoid V1.1 (RAFT+CLIP+DINOv2)',
+                'humanoid_v1_2': 'Humanoid V1.2 (Combined Data)',
+                'humanoid_v2': 'Humanoid V2 (Unitree G1)',
+                'humanoid_v2_2': 'Humanoid V2.2 (Combined Data)'
+            };
+            const selectedModel = modelType.value;
+
+            // Display stats
+            const modeLabel = result.inference_mode === 'mode1' ? 'Full Trajectory' : result.inference_mode === 'mode2' ? 'Realtime' : 'Standard';
+            let statsHTML = `
+                <div class="stat-card">
+                    <h4>Model</h4>
+                    <div class="value" style="font-size: 1em;">${modelNames[selectedModel] || selectedModel}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Total Frames</h4>
+                    <div class="value">${result.num_frames}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>FPS</h4>
+                    <div class="value">${result.fps}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Velocity Points</h4>
+                    <div class="value">${result.predictions.length}</div>
+                </div>`;
+
+            if (result.inference_mode) {
+                statsHTML += `
+                <div class="stat-card">
+                    <h4>Inference Mode</h4>
+                    <div class="value" style="font-size: 1em;">${modeLabel}</div>
+                </div>`;
+            }
+            if (result.total_distance !== undefined) {
+                statsHTML += `
+                <div class="stat-card">
+                    <h4>Total Distance</h4>
+                    <div class="value" style="font-size: 1.2em;">${result.total_distance.toFixed(3)}m</div>
+                </div>`;
+            }
+            if (result.mean_speed !== undefined) {
+                statsHTML += `
+                <div class="stat-card">
+                    <h4>Mean Speed</h4>
+                    <div class="value" style="font-size: 1.2em;">${result.mean_speed.toFixed(3)} m/s</div>
+                </div>`;
+            }
+            if (result.inference_hz !== undefined) {
+                statsHTML += `
+                <div class="stat-card">
+                    <h4>Inference Rate</h4>
+                    <div class="value" style="font-size: 1.2em;">${result.inference_hz.toFixed(0)} Hz</div>
+                </div>`;
+            }
+            stats.innerHTML = statsHTML;
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadData(format) {
+            if (!inferenceData) return;
+
+            fetch('/api/download/' + format, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    predictions: inferenceData.predictions,
+                    trajectory: inferenceData.trajectory,
+                    filename: currentFile.name.replace(/\.[^/.]+$/, '')
+                })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentFile.name.replace(/\.[^/.]+$/, '') + '.' + format;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            })
+            .catch(error => {
+                showError('Download failed: ' + error.message);
+            });
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+
+        function hideError() {
+            const errorMessage = document.getElementById('errorMessage');
+            errorMessage.classList.remove('show');
+        }
+
+        document.getElementById('clearResults').addEventListener('click', () => {
+            currentFile = null;
+            inferenceData = null;
+            selectedFile.classList.remove('show');
+            resultsSection.classList.remove('show');
+            runInferenceBtn.disabled = true;
+            fileInput.value = '';
+            hideError();
+        });
+    </script>
+</body>
+</html>
+

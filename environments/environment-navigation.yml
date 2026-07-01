@@ -1,0 +1,29 @@
+name: genesis-navigation
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - torch>=2.0.0
+      - torchvision>=0.15.0
+      - numpy>=1.24.0
+      - pillow>=9.0.0
+      - opencv-python>=4.7.0
+      - tqdm>=4.65.0
+      - einops>=0.6.0
+      - timm>=0.9.0
+      - transformers>=4.30.0
+      - diffusers>=0.21.0
+      - flask>=2.3.0
+      - python-dotenv>=1.0.0
+      - matplotlib>=3.6.0
+      - scipy>=1.10.0
+
+# Usage:
+#   conda env create -f environments/environment-navigation.yml
+#   conda activate genesis-navigation
+# Required for: Part 2a — FlowDiT V2 training and inference

@@ -1,0 +1,30 @@
+# FlowDiT V2 Requirements
+# Python 3.9+
+
+# Core
+torch>=2.0.0
+torchvision>=0.15.0
+torchaudio>=2.0.0
+
+# Vision & ML
+transformers>=4.30.0
+timm>=0.9.0
+
+# Data Processing
+opencv-python>=4.8.0
+numpy>=1.24.0
+pillow>=10.0.0
+
+# Training
+tensorboard>=2.13.0
+tqdm>=4.65.0
+wandb>=0.15.0
+
+# Utilities
+pyyaml>=6.0.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Optional but recommended
+einops>=0.7.0
+accelerate>=0.20.0

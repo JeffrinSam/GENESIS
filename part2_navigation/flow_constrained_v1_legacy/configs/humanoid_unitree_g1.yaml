@@ -1,0 +1,240 @@
+# Flow-Constrained VideotoNav - Unitree G1 Humanoid Configuration
+# Author: Jeffrin Sam
+# Institution: Skoltech
+# Date: January 2026
+
+# Model Configuration for Unitree G1 Humanoid Robot
+model:
+  embodiment: 'humanoid'
+  embodiment_id: 3  # 0=wheeled, 1=legged, 2=aerial, 3=humanoid
+
+  # Network Architecture
+  ego_motion_dim: 3        # vx, vy, yaw from optical flow
+  vdm_feature_dim: 1024    # Stable Video Diffusion features
+  vision_feature_dim: 768  # DINOv2 ViT-L features
+  embodiment_dim: 64       # Learned embodiment embedding
+  hidden_dim: 512          # Fusion network hidden size
+  num_embodiments: 4       # Total embodiment types
+  action_dim: 3            # vx, vy, yaw (no vz for humanoid)
+  dropout: 0.1
+
+  # Feature Extractors (Frozen - Pre-trained)
+  optical_flow:
+    model: 'RAFT-Large'
+    version: 'raft_large_C_T_SKHT_V2'
+    pretrained: true
+    frozen: true
+    output_dim: [2, H, W]  # 2D flow field
+
+  video_diffusion:
+    model: 'Stable-Video-Diffusion'
+    version: 'stabilityai/stable-video-diffusion-img2vid'
+    pretrained: true
+    frozen: true
+    output_dim: 1024
+
+  vision_encoder:
+    model: 'DINOv2'
+    version: 'facebook/dinov2-large'
+    pretrained: true
+    frozen: true
+    output_dim: 768
+
+# Unitree G1 Physical Constraints
+constraints:
+  humanoid:
+    # Velocity Limits (Conservative for safe navigation)
+    max_v: 1.0              # m/s - Maximum linear velocity
+    max_w: 0.8              # rad/s - Maximum angular velocity
+    max_lateral_v: 0.5      # m/s - Maximum lateral velocity
+
+    # Acceleration Limits (Smooth motion for stability)
+    max_acc: 0.5            # m/s² - Linear acceleration
+    max_ang_acc: 0.5        # rad/s² - Angular acceleration
+
+    # Action Space
+    action_dim: 3           # [vx, vy, yaw]
+    action_names: ['forward_velocity', 'lateral_velocity', 'angular_velocity']
+    action_units: ['m/s', 'm/s', 'rad/s']
+
+    # Control Frequency
+    control_hz: 16          # 16 Hz control rate
+    dt: 0.0625              # 62.5ms timestep
+
+    # Safety Parameters
+    emergency_stop_threshold: 2.0   # m/s - Maximum velocity jump
+    smoothing_window: 3             # Temporal smoothing window
+    smoothing_alpha: 0.3            # Exponential smoothing factor
+
+    # Unitree G1 Specific
+    height: 1.27            # meters - Standing height
+    weight: 35.0            # kg - Robot weight
+    footprint: 0.45         # meters - Approximate footprint diameter
+    max_step_height: 0.15   # meters - Maximum step obstacle
+
+# Training Configuration (Reference - Model already trained)
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.0001
+  optimizer: 'AdamW'
+  weight_decay: 0.01
+  scheduler: 'cosine'
+
+  loss_weights:
+    vx: 1.0
+    vy: 1.0
+    yaw: 0.5
+
+  dataset:
+    train_split: 0.8
+    val_split: 0.1
+    test_split: 0.1
+    clip_length: 16         # frames per clip
+    fps: 16                 # frames per second
+
+# Inference Configuration for Unitree G1
+inference:
+  device: 'cuda'            # Use GPU for real-time inference
+  checkpoint: 'checkpoints/wheeled/best_model.pth'  # Trained model
+
+  # Video Input
+  video:
+    resolution: [480, 832]  # Height x Width (480p)
+    fps: 16                 # Expected input FPS
+    channels: 3             # RGB
+
+  # Processing
+  batch_size: 1             # Real-time single frame processing
+  use_temporal_smoothing: true
+  apply_constraints: true
+  apply_safety_checks: true
+
+  # Output
+  output_format: 'dict'     # 'dict' or 'array'
+  output_keys: ['vx', 'vy', 'yaw']
+
+# Deployment for Unitree G1
+deployment:
+  mode: 'real_time'         # 'real_time' or 'batch'
+
+  # ROS Integration (Optional)
+  ros:
+    enabled: false
+    cmd_vel_topic: '/cmd_vel'
+    camera_topic: '/camera/image_raw'
+    rate: 16                # Hz
+
+  # Direct Integration
+  direct:
+    enabled: true
+    camera_id: 0            # Unitree G1 camera ID
+    command_interface: 'sdk'  # Use Unitree SDK
+
+  # Safety Features
+  safety:
+    enable_collision_avoidance: true
+    enable_emergency_stop: true
+    max_deployment_speed: 0.8  # m/s (80% of max for safety margin)
+    obstacle_detection_distance: 1.0  # meters
+
+# Intelligence Version Information
+intelligence:
+  name: 'Flow-Constrained VideotoNav'
+  version: '1.0'
+  architecture: 'Multi-Modal Fusion Network'
+
+  components:
+    optical_flow:
+      name: 'RAFT'
+      version: 'Large'
+      paper: 'Teed & Deng, ECCV 2020'
+      parameters: '~5M'
+
+    video_diffusion:
+      name: 'Stable Video Diffusion'
+      version: 'img2vid'
+      paper: 'Stability AI, 2023'
+      parameters: '~1B'
+
+    vision_encoder:
+      name: 'DINOv2'
+      version: 'ViT-L/14'
+      paper: 'Oquab et al., ICLR 2024'
+      parameters: '~300M'
+
+    fusion_network:
+      name: 'Residual MLP + Embodiment Embedding'
+      version: 'Custom'
+      parameters: '~2M'
+      trainable: true
+
+  # Model Performance (Test Set: 896 samples)
+  performance:
+    vx_mae: 0.091276        # m/s (~9 cm/s)
+    vy_mae: 0.000044        # m/s (~4 μm/s) - Excellent!
+    yaw_mae: 0.354450       # rad/s (~20°/s)
+    overall_mse: 0.0824
+    overall_mae: 0.1486
+
+  # Embodiment Support
+  embodiments:
+    - wheeled
+    - legged
+    - aerial
+    - humanoid              # ← Unitree G1
+
+  # Training Dataset
+  training_data:
+    source: 'RECON Dataset'
+    videos: 3579            # Training clips
+    test_videos: 896
+    total_clips: 4475
+
+  # Hardware Requirements
+  hardware:
+    gpu: 'NVIDIA RTX 3090 or better'
+    gpu_memory: '12GB minimum'
+    cpu: 'Modern multi-core'
+    ram: '16GB minimum'
+
+  # Real-time Performance
+  latency:
+    feature_extraction: '~50ms'
+    inference: '~5ms'
+    total_per_frame: '~55ms'
+    effective_fps: '~18 Hz'
+
+# Unitree G1 Integration Notes
+unitree_g1:
+  description: 'Humanoid robot with 23 DOF'
+  manufacturer: 'Unitree Robotics'
+
+  capabilities:
+    walking_speed: '0.5-1.0 m/s'
+    turning_rate: '0.3-0.8 rad/s'
+    sensors:
+      - 'RGB cameras'
+      - 'Depth sensors'
+      - 'IMU'
+      - 'Force sensors'
+
+  integration_steps:
+    1: 'Install model on onboard computer'
+    2: 'Connect to camera feed (16 FPS recommended)'
+    3: 'Initialize SDK connection'
+    4: 'Load trained checkpoint'
+    5: 'Start inference loop with safety checks'
+    6: 'Send commands via SDK at 16Hz'
+
+  recommended_settings:
+    start_velocity: 0.3      # m/s - Start slow for safety
+    max_operational_speed: 0.8  # m/s - Conservative limit
+    smoothing_enabled: true
+    safety_checks_enabled: true
+
+  contact:
+    author: 'Jeffrin Sam'
+    institution: 'Skoltech'
+    email: 'jeffrin.sam@skoltech.ru'
+    year: 2025

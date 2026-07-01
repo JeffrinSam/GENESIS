@@ -1,0 +1,74 @@
+# Configuration for Aerial Robot (Drone) Training
+
+model:
+  # Model architecture
+  ego_motion_dim: 3  # vx, vy, yaw from optical flow
+  vdm_feature_dim: 1024  # VDM features
+  vision_feature_dim: 768  # DINOv2-base features
+  embodiment_dim: 64  # Learned embodiment embedding
+  hidden_dim: 512  # Fusion network hidden dimension
+  num_embodiments: 4  # wheeled, legged, aerial, humanoid
+  action_dim: 4  # vx, vy, vz, yaw (includes vertical for aerial)
+  dropout: 0.1
+
+training:
+  # Training hyperparameters
+  epochs: 50
+  batch_size: 16
+  lr: 1.0e-4  # Learning rate
+  weight_decay: 0.01  # AdamW weight decay
+  clip_grad_norm: 1.0  # Gradient clipping
+
+  # Scheduler
+  use_scheduler: true
+  scheduler_type: cosine
+
+  # Loss weights
+  use_flow_loss: false
+  flow_loss_weight: 0.1
+  use_temporal_loss: false
+  temporal_loss_weight: 0.1
+
+  # Constraints
+  apply_constraints: false
+
+  # Checkpointing
+  checkpoint_dir: checkpoints/aerial
+  save_every: 5
+
+  # Logging
+  use_wandb: false
+  project_name: flow-constrained-aerial
+  run_name: null
+
+  # Data loading
+  num_workers: 4
+  pin_memory: true
+
+data:
+  # Dataset paths
+  root_dir: /path/to/your/dataset  # TODO: Change this!
+  feature_dir: /path/to/features  # TODO: Change this!
+
+  # Feature loading
+  load_features: true
+  use_resolution_adapter: true
+
+  # Augmentation
+  augmentation: true
+  augmentation_prob: 0.5
+
+constraints:
+  # Physical constraints for aerial robots (faster, more agile)
+  max_v: 5.0  # m/s horizontal velocity
+  max_vz: 3.0  # m/s vertical velocity
+  max_w: 2.0  # rad/s angular velocity
+  max_acc: 2.0  # m/s^2 horizontal acceleration
+  max_ang_acc: 1.5  # rad/s^2 angular acceleration
+
+  # Temporal smoothing
+  smoothing_window: 3
+
+embodiment:
+  type: aerial
+  name: "Aerial Drone"

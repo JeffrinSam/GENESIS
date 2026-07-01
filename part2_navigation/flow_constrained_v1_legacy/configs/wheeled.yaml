@@ -1,0 +1,73 @@
+# Configuration for Wheeled Robot Training
+
+model:
+  # Model architecture
+  ego_motion_dim: 3  # vx, vy, yaw from optical flow
+  vdm_feature_dim: 1280  # VDM features (Stable Video Diffusion CLIP encoder)
+  vision_feature_dim: 768  # DINOv2-base features
+  embodiment_dim: 64  # Learned embodiment embedding
+  hidden_dim: 512  # Fusion network hidden dimension
+  num_embodiments: 4  # wheeled, legged, aerial, humanoid
+  action_dim: 3  # vx, vy, yaw (no vz for wheeled)
+  dropout: 0.1
+
+training:
+  # Training hyperparameters
+  epochs: 50
+  batch_size: 4  # Reduced due to large feature files (260MB per video)
+  lr: 1.0e-4  # Learning rate
+  weight_decay: 0.01  # AdamW weight decay
+  clip_grad_norm: 1.0  # Gradient clipping
+
+  # Scheduler
+  use_scheduler: true
+  scheduler_type: cosine  # cosine, step, plateau
+
+  # Loss weights
+  use_flow_loss: false  # Flow consistency loss
+  flow_loss_weight: 0.1
+  use_temporal_loss: false  # Temporal smoothness loss
+  temporal_loss_weight: 0.1
+
+  # Constraints
+  apply_constraints: false  # Apply during training (usually false)
+
+  # Checkpointing
+  checkpoint_dir: checkpoints/wheeled
+  save_every: 5  # Save checkpoint every N epochs
+
+  # Logging
+  use_wandb: false  # Set to true to enable wandb logging
+  project_name: flow-constrained-wheeled
+  run_name: null  # Auto-generated if null
+
+  # Data loading
+  num_workers: 0  # Single process to avoid memory issues
+  pin_memory: false  # Disable to reduce memory usage
+
+data:
+  # Dataset paths
+  root_dir: ${GENESIS_ROOT}/part2_navigation/dataset/recon
+  feature_dir: ${GENESIS_ROOT}/part2_navigation/features/recon
+
+  # Feature loading
+  load_features: true  # Set to true if features are pre-extracted
+  use_resolution_adapter: true  # Enable multi-resolution support
+
+  # Augmentation
+  augmentation: true
+  augmentation_prob: 0.5
+
+constraints:
+  # Physical constraints for wheeled robots
+  max_v: 2.0  # m/s linear velocity
+  max_w: 1.5  # rad/s angular velocity
+  max_acc: 1.0  # m/s^2 acceleration
+  max_ang_acc: 1.0  # rad/s^2 angular acceleration
+
+  # Temporal smoothing
+  smoothing_window: 3  # Moving average window size
+
+embodiment:
+  type: wheeled
+  name: "Wheeled Robot"

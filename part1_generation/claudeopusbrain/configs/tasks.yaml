@@ -1,0 +1,38 @@
+# Benchmark tasks for evaluation
+
+navigation:
+  drone:
+    - name: "outdoor_forest"
+      prompt: "Drone flies forward through dense forest"
+      difficulty: "medium"
+    - name: "indoor_warehouse"
+      prompt: "Drone navigates through warehouse aisles"
+      difficulty: "hard"
+    - name: "obstacle_course"
+      prompt: "Drone maneuvers around obstacles"
+      difficulty: "hard"
+
+  ground:
+    - name: "hallway_navigation"
+      prompt: "Ground robot moves down hallway"
+      difficulty: "easy"
+    - name: "cluttered_space"
+      prompt: "Robot navigates cluttered room"
+      difficulty: "hard"
+
+manipulation:
+  ur3:
+    - name: "pick_place"
+      prompt: "Pick up red cube with left arm"
+      difficulty: "easy"
+    - name: "bimanual_assembly"
+      prompt: "Assemble parts using both arms"
+      difficulty: "hard"
+
+  g1:
+    - name: "bottle_pickup"
+      prompt: "Humanoid picks up bottle from table"
+      difficulty: "medium"
+    - name: "whole_body_reach"
+      prompt: "Humanoid reaches high shelf"
+      difficulty: "hard"

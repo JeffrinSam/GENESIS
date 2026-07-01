@@ -1,0 +1,27 @@
+name: genesis-simulation
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - numpy>=1.24.0
+      - torch>=2.0.0
+      - torchvision>=0.15.0
+      - opencv-python>=4.7.0
+      - matplotlib>=3.6.0
+      - scipy>=1.10.0
+      - tqdm>=4.65.0
+      - python-dotenv>=1.0.0
+
+# NOTE: Isaac Sim and Isaac Lab are NOT pip-installable.
+# Install separately following NVIDIA's official guide:
+#   https://docs.isaacsim.omniverse.nvidia.com/
+# Required Isaac Sim version: 5.1+
+# Required Isaac Lab version: as bundled with Isaac Sim 5.1
+#
+# Usage:
+#   conda env create -f environments/environment-simulation.yml
+#   conda activate genesis-simulation
+# Required for: Simulator — Isaac Sim validation pipeline

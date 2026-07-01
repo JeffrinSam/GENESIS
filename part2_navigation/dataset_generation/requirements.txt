@@ -1,0 +1,16 @@
+# Dataset Generation Requirements
+
+# Core dependencies
+habitat-sim>=0.2.3
+numpy>=1.21.0
+opencv-python>=4.5.0
+matplotlib>=3.5.0
+tqdm>=4.65.0
+pyyaml>=6.0
+
+# Optional but recommended
+pillow>=9.0.0
+scipy>=1.7.0  # Required for TartanAir pose conversion
+
+# For downloading real datasets (optional)
+# tartanair  # Uncomment to download TartanAir datasets

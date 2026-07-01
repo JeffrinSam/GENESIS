@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "GENESIS: Video-Conditioned Robot Learning"
+type: software
+authors:
+  - family-names: Sam
+    given-names: Jeffrin
+    affiliation: Skoltech
+    email: jfgpt07@gmail.com
+    orcid: "https://orcid.org/0009-0000-8635-5379"
+license: Apache-2.0
+repository-code: https://github.com/jeffrinsam/GENESIS
+
+# Paper 1 — Action Agent: navigation + generation pipeline (arXiv:2605.01477)
+preferred-citation:
+  type: article
+  title: "Action Agent: Agentic Video Generation Meets Flow-Constrained Diffusion"
+  authors:
+    - family-names: Sam
+      given-names: Jeffrin
+    - family-names: Khang
+      given-names: Nguyen
+    - family-names: Mahmoud
+      given-names: Yara
+    - family-names: Altamirano Cabrera
+      given-names: Miguel
+    - family-names: Tsetserukou
+      given-names: Dzmitry
+  year: 2026
+  url: "https://arxiv.org/abs/2605.01477"
+  identifiers:
+    - type: other
+      value: "arXiv:2605.01477"
+
+# Paper 2 — PhysicalAgent: manipulation pipeline (arXiv:2509.13903)
+# https://arxiv.org/abs/2509.13903
+
+# Paper 3 — VLA fine-tuning (arXiv:2606.13856) — separate repo
+# https://github.com/jeffrinsam/genesis-icra2027

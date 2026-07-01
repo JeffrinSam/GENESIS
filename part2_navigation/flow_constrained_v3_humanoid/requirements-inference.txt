@@ -1,0 +1,6 @@
+# FlowDiT V3 Humanoid — inference only (no training)
+torch>=2.0.0
+torchvision>=0.15.0
+transformers>=4.30.0
+Pillow>=9.0
+numpy>=1.24.0
