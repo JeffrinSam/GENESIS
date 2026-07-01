@@ -199,7 +199,7 @@ conda run -n wan2.2 python3 run_batch_experiments.py \
 
 ```bash
 # For Llama/Qwen models
-curl http://192.168.50.138:8000/health
+curl ${OLLAMA_SERVER:-http://localhost:11434}/health
 
 # Should return: {"status": "ok"}
 # If not, restart Ollama server

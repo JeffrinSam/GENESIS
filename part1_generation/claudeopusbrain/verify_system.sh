@@ -40,10 +40,10 @@ echo ""
 
 # Test 3: Ollama server (for free models)
 echo "3. Checking Ollama server (for Llama/Qwen)..."
-if curl -s -f http://192.168.50.138:8000/health > /dev/null 2>&1; then
+if curl -s -f "${OLLAMA_SERVER:-http://localhost:11434}/health" > /dev/null 2>&1; then
     echo "   ✅ Ollama server is running"
 else
-    echo "   ⚠️  Ollama server not reachable at 192.168.50.138:8000"
+    echo "   ⚠️  Ollama server not reachable at ${OLLAMA_SERVER:-http://localhost:11434}"
     echo "      (Only needed for Llama/Qwen models, not Claude)"
     WARNINGS=$((WARNINGS+1))
 fi
@@ -101,7 +101,7 @@ echo ""
 
 # Test 6: AgentLLM components
 echo "6. Checking AgentLLM components..."
-AGENTLLM_BASE="/mnt/Thesis/JeffrinSam/Part1/AgentLLM"
+AGENTLLM_BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../agentllm" 2>/dev/null && pwd)"
 
 if [ -d "$AGENTLLM_BASE" ]; then
     echo "   ✅ AgentLLM directory exists"
@@ -117,7 +117,7 @@ else
     ERRORS=$((ERRORS+1))
 fi
 
-if [ -d "/mnt/Thesis/JeffrinSam/Part1/Qwen3-VL" ]; then
+if [ -d "${QWEN_ROOT:-/opt/qwen3-vl}" ] || [ -d "$(dirname "${BASH_SOURCE[0]}")/../qwen_prompt_expansion" ]; then
     echo "   ✅ Qwen3-VL found"
 else
     echo "   ❌ Qwen3-VL not found"

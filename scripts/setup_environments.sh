@@ -32,15 +32,17 @@ create_env() {
 check_conda
 
 echo "Creating environments (this may take 5-10 minutes)..."
-create_env "genesis-generation"  "$ENV_DIR/environment-generation.yml"
-create_env "genesis-navigation"  "$ENV_DIR/environment-navigation.yml"
-create_env "genesis-simulation"  "$ENV_DIR/environment-simulation.yml"
+create_env "genesis-generation"    "$ENV_DIR/environment-generation.yml"
+create_env "genesis-navigation"    "$ENV_DIR/environment-navigation.yml"
+create_env "genesis-manipulation"  "$ENV_DIR/environment-manipulation.yml"
+create_env "genesis-simulation"    "$ENV_DIR/environment-simulation.yml"
 
 echo ""
 echo "=== Done ==="
 echo "Activate with:"
-echo "  conda activate genesis-generation   # Part 1 — video generation"
-echo "  conda activate genesis-navigation   # Part 2a — FlowDiT navigation"
-echo "  conda activate genesis-simulation   # Simulator — Isaac Sim evaluation"
+echo "  conda activate genesis-generation    # Part 1 — video generation"
+echo "  conda activate genesis-navigation    # Part 2a — FlowDiT navigation"
+echo "  conda activate genesis-manipulation  # Part 2b — DC-GR00T manipulation"
+echo "  conda activate genesis-simulation    # Simulator — Isaac Sim evaluation"
 echo ""
 echo "See docs/SETUP.md for upstream model setup (WAN 2.2, Cosmos 2.5, Qwen3-VL)."

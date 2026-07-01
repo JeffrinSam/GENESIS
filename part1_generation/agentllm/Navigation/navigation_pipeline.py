@@ -33,9 +33,9 @@ logging.basicConfig(
 )
 
 # Base paths — resolved from environment variables (set in .env or shell)
-WAN_BASE = Path(os.getenv("WAN_ROOT", str(Path(__file__).resolve().parents[4] / "Part1" / "Wan2.2")))
-QWEN_EXTENDERS = Path(os.getenv("QWEN_ROOT", str(Path(__file__).resolve().parents[4] / "Part1" / "Qwen3-VL"))) / "prompt_extenders"
-COSMOS_REASON2_BASE = Path(os.getenv("COSMOS_REASON2_ROOT", str(Path(__file__).resolve().parents[4] / "Part1" / "cosmos-reason2")))
+WAN_BASE = Path(os.getenv("WAN_ROOT", "/opt/wan2.2"))
+QWEN_EXTENDERS = Path(os.getenv("QWEN_ROOT", "/opt/qwen3-vl")) / "prompt_extenders"
+COSMOS_REASON2_BASE = Path(os.getenv("COSMOS_REASON2_ROOT", "/opt/cosmos-reason2"))
 VALIDATOR_SCRIPT = Path(__file__).parent / 'video_validator.py'  # Direct Cosmos-Reason2 validator
 OUTPUT_DIR = Path(__file__).parent / 'outputs'
 
@@ -76,7 +76,7 @@ def enhance_prompt(task_type: str, user_prompt: str, image_path: str) -> str:
     logging.info(f"Perspective: First-person embodied")
 
     # Use Qwen3.5 venv (needs transformers>=5.0 for qwen3_5 model type)
-    qwen35_python = os.getenv("QWEN_PYTHON", str(Path(os.getenv("QWEN_ROOT", str(Path(__file__).resolve().parents[4] / "Part1" / "Qwen3-VL"))) / ".venv" / "bin" / "python"))
+    qwen35_python = os.getenv("QWEN_PYTHON", str(Path(os.getenv("QWEN_ROOT", "/opt/qwen3-vl")) / ".venv" / "bin" / "python"))
     cmd = [
         qwen35_python, str(extender_script),
         '--prompt', user_prompt,

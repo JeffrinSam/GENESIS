@@ -1,0 +1,40 @@
+name: genesis-manipulation
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - torch==2.7.0
+      - torchvision==0.22.0
+      - transformers==4.53.0
+      - peft==0.17.1
+      - diffusers==0.35.1
+      - einops==0.8.1
+      - numpy>=1.24.0
+      - pillow>=9.0.0
+      - opencv-python>=4.7.0
+      - tqdm>=4.65.0
+      - termcolor>=2.0.0
+      - tyro>=0.9.0
+      - datasets>=3.0.0
+      - pandas>=2.0.0
+      - lerobot>=2.1.0
+      - huggingface-hub>=0.20.0
+      - safetensors>=0.4.0
+
+# Usage:
+#   conda env create -f environments/environment-manipulation.yml
+#   conda activate genesis-manipulation
+#
+# Note: flash-attn requires CUDA 12.x and a compatible gcc.
+#   Install it separately after the environment is created:
+#   pip install flash-attn==2.7.4.post1 --no-build-isolation
+#
+# Alternatively, use uv (faster, recommended for DC-GR00T):
+#   cd part2_manipulation && uv sync --python 3.10 && uv pip install -e .
+#
+# Required for: Part 2b — DC-GR00T manipulation training and inference

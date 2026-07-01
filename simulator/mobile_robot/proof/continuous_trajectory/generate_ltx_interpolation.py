@@ -13,7 +13,7 @@ import shutil
 import requests
 from pathlib import Path
 
-API_URL = "http://192.168.50.253:5001"
+API_URL = os.getenv("LTX_SERVER", "http://192.168.50.253:5001")
 UPLOAD_URL = f"{API_URL}/upload"
 GENERATE_URL = f"{API_URL}/generate/keyframe_interpolation"
 VIDEO_URL = f"{API_URL}/videos"

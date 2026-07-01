@@ -21,7 +21,8 @@ source ~/anaconda3/etc/profile.d/conda.sh
 conda activate dc_groot
 
 # Set PYTHONPATH
-export PYTHONPATH=/mnt/Thesis/JeffrinSam/Part2/vidtomani/Isaac-GR00T:$PYTHONPATH
+GENESIS_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+export PYTHONPATH="$GENESIS_ROOT/part2_manipulation:$PYTHONPATH"
 
 # Memory optimization
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True

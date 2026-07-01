@@ -18,9 +18,9 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-IMAGE = "/home/humanoid-isr/LTX-2/web/uploads/Screenshot_from_2026-02-06_13-44-44_20260206_134452.png"
-PIPELINE = "/mnt/Thesis/JeffrinSam/Part1/AgentLLM/Manipulation/manipulation_pipeline.py"
-OUTPUT_DIR = Path("/mnt/Thesis/JeffrinSam/Part1/Claudeopusbrain/tests/batch_results")
+IMAGE = os.getenv("TEST_IMAGE", "test_image.jpg")  # set TEST_IMAGE env var
+PIPELINE = str(Path(__file__).resolve().parents[3] / "agentllm" / "Manipulation" / "manipulation_pipeline.py")
+OUTPUT_DIR = Path(__file__).parent / "batch_results"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Different prompts to test — from simple to detailed, left/right arm, 5s and 10s
