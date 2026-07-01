@@ -12,7 +12,7 @@ Open a GitHub Issue with:
 
 ## Questions
 
-Open a GitHub Discussion or email `jfgpt07@gmail.com`.
+Open a GitHub Discussion.
 
 ## Code Style
 

@@ -62,8 +62,6 @@ Text instruction + workspace image
 | [`environments/`](environments/) | Conda environment YAMLs | — |
 | [`docs/`](docs/) | Architecture and setup docs | — |
 
-**Related repo:** [genesis-icra2027](https://github.com/jeffrinsam/genesis-icra2027) — VICReg VLA fine-tuning (arXiv:2606.13856)
-
 ---
 
 ## Quick Start
@@ -364,7 +362,6 @@ If you work on any of these problems — or want to — reach out. I am particul
 
 | | |
 |---|---|
-| **Email** | jfgpt07@gmail.com |
 | **LinkedIn** | [jeffrin-s-a-m](https://www.linkedin.com/in/jeffrin-s-a-m/) |
 | **HuggingFace** | [JeffrinSam](https://huggingface.co/JeffrinSam) |
 | **Google Scholar** | [OyIR64QAAAAJ](https://scholar.google.com/citations?user=OyIR64QAAAAJ) |

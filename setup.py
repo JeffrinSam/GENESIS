@@ -5,7 +5,7 @@ setup(
     version="1.0.0",
     description="GENESIS: Video-Conditioned Robot Learning — agentic video generation, navigation, and manipulation",
     author="Jeffrin Sam",
-    author_email="jfgpt07@gmail.com",
+    url="https://github.com/JeffrinSam/GENESIS",
     license="Apache-2.0",
     python_requires=">=3.10",
     packages=find_packages(exclude=["tests*", "notebooks*", "docs*"]),
