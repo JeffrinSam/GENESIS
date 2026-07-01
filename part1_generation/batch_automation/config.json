@@ -1,0 +1,58 @@
+{
+  "batch_config": {
+    "navigation": {
+      "category": "navigation",
+      "models": ["drone", "ground", "g1_nav"],
+      "generator": "WAN 2.2 TI2V-5B",
+      "default_params": {
+        "resolution": "1280*704",
+        "frames": 61,
+        "guidance_scale": 7.5,
+        "sample_steps": 30,
+        "timeout_seconds": 600
+      },
+      "detection_rules": {
+        "drone": ["drone", "aerial", "fpv", "flying", "flight", "air"],
+        "ground": ["ground", "corridor", "navigate", "indoor"],
+        "g1_nav": ["g1", "humanoid", "walk", "walking", "bipedal", "through door", "through the door"]
+      }
+    },
+    "manipulation": {
+      "category": "manipulation",
+      "models": ["ur3", "g1"],
+      "generator": "Cosmos 2.5",
+      "default_params": {
+        "model": "2B",
+        "frames": 77,
+        "guidance_scale": 7,
+        "timeout_seconds": 900
+      },
+      "model_params": {
+        "2B": {
+          "frames": 77,
+          "time_estimate": "3-5 minutes"
+        },
+        "14B": {
+          "frames": 121,
+          "time_estimate": "10-12 minutes"
+        }
+      },
+      "detection_rules": {
+        "ur3": ["ur3", "bimanual", "dual", "arm"],
+        "g1": ["g1", "humanoid", "walk", "robot"]
+      }
+    },
+    "prompts": {
+      "drone_default": "Smooth cinematic drone flight through scenic landscape",
+      "ground_default": "Smooth ground robot navigation through indoor environment",
+      "ur3_default": "UR3 robot performing precise manipulation task",
+      "g1_default": "G1 humanoid robot performing manipulation task",
+      "g1_nav_default": "Humanoid G1 walking forward through indoor environment"
+    },
+    "output": {
+      "base_directory": "./results",
+      "naming_format": "{run_id}/{task_id}.mp4",
+      "log_format": "batch_automation.log"
+    }
+  }
+}

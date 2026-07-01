@@ -14,6 +14,9 @@ This module implements **ClaudeOpusBrain**: an LLM-in-the-loop pipeline that gen
 |-----------|---------|
 | [`claudeopusbrain/`](claudeopusbrain/) | Self-tuning brain: Claude API optimizer + WAN/Cosmos generator + Cosmos-Reason2 validator |
 | [`agentllm/`](agentllm/) | Unified 4-task web UI (port 5002) for drone, ground, manipulation, and humanoid nav tasks |
+| [`mainpipeline/`](mainpipeline/) | Flask manual web UI (port 5000) for one-shot navigation and manipulation video generation |
+| [`qwen_prompt_expansion/`](qwen_prompt_expansion/) | Qwen3-VL prompt expansion scripts: image description, task routing, per-robot extenders |
+| [`batch_automation/`](batch_automation/) | GPU-friendly batch runners that process many images sequentially (one model loaded at a time) |
 
 ## Quick Start
 
@@ -33,6 +36,31 @@ python run_batch_experiments.py --tasks tasks.json --model opus \
 ```
 
 See [`claudeopusbrain/README.md`](claudeopusbrain/README.md) and [`agentllm/README.md`](agentllm/README.md) for full setup and usage.
+
+### Manual Pipeline (single video, browser UI)
+
+```bash
+conda activate genesis-generation
+cd part1_generation/mainpipeline
+
+export WAN_ROOT=/path/to/Wan2.2
+export COSMOS_ROOT=/path/to/cosmos-predict2.5
+
+./start_server.sh    # http://localhost:5000
+```
+
+### Batch Generation
+
+```bash
+conda activate genesis-generation
+cd part1_generation/batch_automation
+
+# Navigation batch (reads images from agentllm/Navigation/uploads/)
+python batch_navigation_sequential.py --input-dir /path/to/nav/images
+
+# Manipulation batch (reads images from agentllm/Manipulation/uploads/)
+python batch_manipulation_sequential.py --input-dir /path/to/manip/images
+```
 
 ## External Dependencies
 
