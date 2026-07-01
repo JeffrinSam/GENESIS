@@ -54,7 +54,7 @@ Text instruction + workspace image
 
 | Directory | Description | Conda env |
 |-----------|-------------|-----------|
-| [`part1_generation/`](part1_generation/) | ClaudeOpusBrain self-tuning video generation — [Action Agent](https://arxiv.org/abs/2605.01477) | `genesis-generation` |
+| [`part1_generation/`](part1_generation/) | ClaudeOpusBrain self-tuning video generation — [Action Agent](https://arxiv.org/abs/2605.01477) (IROS 2026) · [PhysicalAgent](https://arxiv.org/abs/2509.13903) | `genesis-generation` |
 | [`part2_navigation/`](part2_navigation/) | FlowDiT V2 video-to-navigation — [Action Agent](https://arxiv.org/abs/2605.01477) | `genesis-navigation` |
 | [`part2_manipulation/`](part2_manipulation/) | DC-GR00T video-to-manipulation — [PhysicalAgent](https://arxiv.org/abs/2509.13903) | `dc_groot` (see part2_manipulation/README.md) |
 | [`simulator/`](simulator/) | Isaac Sim validation pipeline | `genesis-simulation` |

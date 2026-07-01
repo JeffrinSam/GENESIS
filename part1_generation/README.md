@@ -2,7 +2,9 @@
 
 This module implements **ClaudeOpusBrain**: an LLM-in-the-loop pipeline that generates, validates, and iteratively refines goal-conditioned robot videos. The videos are used downstream as navigation targets (Part 2a) and manipulation demonstrations (Part 2b).
 
-**Paper**: [Action Agent: Agentic Video Generation Meets Flow-Constrained Diffusion](https://arxiv.org/abs/2605.01477) (IROS 2026)
+**Papers**:
+- [Action Agent: Agentic Video Generation Meets Flow-Constrained Diffusion](https://arxiv.org/abs/2605.01477) — IROS 2026 (navigation videos → Part 2a FlowDiT)
+- [PhysicalAgent: Towards General Cognitive Robotics with Foundation World Models](https://arxiv.org/abs/2509.13903) — arXiv (manipulation videos → Part 2b DC-GR00T)
 
 **Conda environment**: `genesis-generation`
 
