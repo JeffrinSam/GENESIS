@@ -1,0 +1,35 @@
+[
+  {
+    "_comment": "Manipulation tasks (50 total) - Fill in with your G1 and UR3 tasks",
+    "task": "Humanoid picks up bottle",
+    "task_type": "g1",
+    "image": "./images/g1_workspace_1.jpg"
+  },
+  {
+    "task": "Humanoid places cup on shelf",
+    "task_type": "g1",
+    "image": "./images/g1_workspace_2.jpg"
+  },
+  {
+    "task": "UR3 picks and places aluminum block",
+    "task_type": "ur3",
+    "image": "./images/ur3_workspace_1.jpg"
+  },
+  {
+    "_comment": "Add 47 more manipulation tasks here..."
+  },
+  {
+    "_comment": "Navigation tasks (50 total) - Fill in with your drone and ground robot tasks",
+    "task": "Drone flies through forest avoiding trees",
+    "task_type": "drone",
+    "image": "./images/drone_forest.jpg"
+  },
+  {
+    "task": "Ground robot navigates cluttered hallway",
+    "task_type": "ground",
+    "image": "./images/ground_hallway.jpg"
+  },
+  {
+    "_comment": "Add 48 more navigation tasks here..."
+  }
+]
